@@ -3,14 +3,14 @@ import Task from './Task';
 import axios from 'axios';
 import { useAuthContext } from "../hooks/useAuthContext";
 
-const Column = ({ status, tasks, setTasks, deleteFilter, editFilter }) => {
+const Column = ({ status, tasks, setTasks, deleteFilter, editFilter, recurFilter }) => {
     const { user } = useAuthContext();
     const [{ isOver }, drop] = useDrop(() => ({
         accept: 'TASK',
         drop: async (item) => {
             if (!user) return;
             try {
-                await axios.patch(`http://localhost:4000/api/routes/${item.id}`,
+                await axios.patch(`${process.env.REACT_APP_BE_URL}/api/routes/${item.id}`,
                     { status },
                     {
                         headers: {
@@ -47,7 +47,13 @@ const Column = ({ status, tasks, setTasks, deleteFilter, editFilter }) => {
         <div ref={drop} className={`column ${getColumnClass(status)} ${isOver ? 'is-over' : ''}`}>
             <p className='status'>{status}</p>
             {tasks
-                .filter((task) => task.status === status)
+                .filter((task) => {
+                    if (task.status !== status) return false;
+                    if (recurFilter) {
+                        return task.recurrence === recurFilter;
+                    }
+                    return task.recurrence !== 'daily' && task.recurrence !== 'weekly' && task.recurrence !== 'monthly';
+                })
                 .map((task) => (
                     <Task key={task._id} task={task} deleteFilter={deleteFilter} editFilter={editFilter} />
                 ))}

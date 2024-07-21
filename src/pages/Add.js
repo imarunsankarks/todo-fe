@@ -3,20 +3,34 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useAuthContext } from "../hooks/useAuthContext";
 import toast, { Toaster } from "react-hot-toast";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { endOfWeek, endOfMonth } from 'date-fns';
 
 const Add = () => {
     const { user } = useAuthContext();
     const [error, setError] = useState(null);
+    const [startDate, setStartDate] = useState(new Date());
     const [title, setTitle] = useState('');
+    const [recur, setRecur] = useState("none");
     const [description, setDescription] = useState('');
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (title && description) {
             try {
-                await axios.post('http://localhost:4000/api/routes', {
+                await axios.post(`${process.env.REACT_APP_BE_URL}/api/routes/`, {
                     title: title,
                     description: description,
-                    deadline: new Date()
+                    recurrence: recur,
+                    deadline: startDate
                 }, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
@@ -25,6 +39,8 @@ const Add = () => {
                 setTitle('');
                 setDescription('');
                 setError('');
+                setRecur('none');
+                setStartDate(new Date());
                 toast('Task added!',
                     {
                         icon: '✅',
@@ -44,6 +60,14 @@ const Add = () => {
             setError('Please fill all the fields');
         }
 
+    }
+    let minDate;
+    if (recur === 'weekly') {
+        minDate = endOfWeek(new Date(), { weekStartsOn: 0 });
+    } else if (recur === 'monthly') {
+        minDate = endOfMonth(new Date());
+    } else {
+        minDate = new Date();
     }
 
     return (
@@ -69,12 +93,33 @@ const Add = () => {
                                     onChange={(e) => setDescription(e.target.value)}
                                     value={description}
                                 />
-                                {/* <DatePicker
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            dateFormat="dd/MM/yyyy"
-                        /> */}
-                                <button>Add Task</button>
+                                <div className="row g-3">
+                                    <div className="col-lg-6">
+                                        <div className="recur">
+                                            <label>Recurrence </label>
+                                            <select value={recur} onChange={(e) => setRecur(e.target.value)}>
+                                                <option value="none">None</option>
+                                                <option value="daily">Daily</option>
+                                                <option value="weekly">Weekly</option>
+                                                <option value="monthly">Monthly</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div className="col-lg-6">
+                                        <div className="date-pick">
+                                            <label>Deadline</label>
+                                            <DatePicker
+                                                selected={startDate}
+                                                onChange={(date) => setStartDate(date)}
+                                                dateFormat="dd/MM/yyyy"
+                                                minDate={minDate}
+                                            />
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <button className="add-task-btn">Add Task</button>
                                 {error && <div className="error">{error}</div>}
                             </form>
                             <Toaster />

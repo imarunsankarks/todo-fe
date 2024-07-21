@@ -6,6 +6,7 @@ import DeleteModal from './DeleteModal';
 import ViewModal from './ViewModal';
 import EditModal from './EditModal';
 import toast, { Toaster } from "react-hot-toast";
+import { endOfWeek, endOfMonth } from 'date-fns';
 
 const Task = ({ task, deleteFilter, editFilter }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -23,6 +24,8 @@ const Task = ({ task, deleteFilter, editFilter }) => {
 
     const [title, setTitle] = useState(task.title);
     const [description, setDescription] = useState(task.description);
+    const [recur, setRecur] = useState(task.recurrence);
+    const [dl, setDl] = useState(task.deadline);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -33,15 +36,17 @@ const Task = ({ task, deleteFilter, editFilter }) => {
     const handleCloseEdit = (val) => {
         setShowEdit(false)
         if (val) {
-            setTitle(task.title)
-            setDescription(task.description)
+            setTitle(task.title);
+            setDescription(task.description);
+            setRecur(task.recurrence);
+            setDl(task.deadline);
         }
     };
     const handleShowEdit = () => setShowEdit(true);
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:4000/api/routes/${id}`, {
+            await axios.delete(`${process.env.REACT_APP_BE_URL}/api/routes/${id}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 }
@@ -61,7 +66,6 @@ const Task = ({ task, deleteFilter, editFilter }) => {
                 }
             );
         } catch (err) {
-            // console.log(err);
             toast(err.message,
                 {
                     icon: '❌',
@@ -77,12 +81,14 @@ const Task = ({ task, deleteFilter, editFilter }) => {
         }
     };
 
-    const handleEdit = async (id, newTitle, newDescription) => {
+    const handleEdit = async (id, newTitle, newDescription, newRecur, newDeadline) => {
         try {
-            await axios.patch(`http://localhost:4000/api/routes/${id}`,
+            await axios.patch(`${process.env.REACT_APP_BE_URL}/api/routes/${id}`,
                 {
                     title: newTitle,
-                    description: newDescription
+                    description: newDescription,
+                    recurrence: newRecur,
+                    deadline: newDeadline,
                 },
                 {
                     headers: {
@@ -91,7 +97,7 @@ const Task = ({ task, deleteFilter, editFilter }) => {
                 }
             );
             handleCloseEdit();
-            editFilter(id, newTitle, newDescription);
+            editFilter(id, newTitle, newDescription, newRecur, newDeadline);
             toast('Task updated!',
                 {
                     icon: '✅',
@@ -110,11 +116,28 @@ const Task = ({ task, deleteFilter, editFilter }) => {
         }
     }
 
+    let minDate;
+    if (recur === 'weekly') {
+        minDate = endOfWeek(new Date(), { weekStartsOn: 0 });
+    } else if (recur === 'monthly') {
+        minDate = endOfMonth(new Date());
+    } else {
+        minDate = new Date();
+    }
+
+    const deadline = new Date(task.deadline);
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+    deadline.setHours(0, 0, 0, 0);
+
+    const isDeadlineExceeded = deadline < today;
+
     return (
         <>
             <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
-                <div className="each-task">
-                    <div className="created">{task.createdAt.split('T')[0]}</div>
+                <div className={`each-task ${isDeadlineExceeded ? 'deadline-exceeded' : ''}`}>
+                    <div className="created">{isDeadlineExceeded ? 'Deadline exceeded' : `Complete by ${task.deadline.split('T')[0]}`}</div>
                     <div className="task-title">{task.title}</div>
                     <div className="task-description">{task.description}</div>
                     <div className="buttons">
@@ -141,6 +164,12 @@ const Task = ({ task, deleteFilter, editFilter }) => {
                         description={description}
                         setTitle={setTitle}
                         setDescription={setDescription}
+                        deadline={dl}
+                        setDl={setDl}
+                        recur={recur}
+                        setRecur={setRecur}
+                        minDate={minDate}
+
                     />
                     <div className="view">
                         <button onClick={handleShowView}>{`>`}</button>

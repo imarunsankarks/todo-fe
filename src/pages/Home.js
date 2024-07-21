@@ -12,13 +12,14 @@ import { Link } from "react-router-dom";
 const Home = () => {
     const [tasks, setTasks] = useState([]);
     const [utasks, setUtasks] = useState([]);
+    const [recurFilter, setRecurFilter] = useState('');
     const [searchItem, setSearchItem] = useState('');
     const { user } = useAuthContext();
     useEffect(() => {
         if (user) {
             const fetchTasks = async () => {
                 try {
-                    const response = await axios.get('http://localhost:4000/api/routes', {
+                    const response = await axios.get(`${process.env.REACT_APP_BE_URL}/api/routes/`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
@@ -41,16 +42,17 @@ const Home = () => {
         }))
     }
 
-    const editFilter = (id, title, description, time) => {
+    const editFilter = (id, title, description, recurrence, deadline) => {
+        deadline = new Date(deadline).toISOString();
         setTasks(tasks.map((item) => {
             if (item._id === id) {
-                return { ...item, title, description, time }
+                return { ...item, title, description, recurrence, deadline }
             }
             return item;
         }))
         setUtasks(tasks.map((item) => {
             if (item._id === id) {
-                return { ...item, title, description, time }
+                return { ...item, title, description, recurrence, deadline }
             }
             return item;
         }))
@@ -81,17 +83,28 @@ const Home = () => {
                             </div>
                         </div>
                         <div className="col-md-6 order-md-2 order-1">
-                            <div className="add">
-                                <p>Add a new task</p>
-                                <Link to="/add"><button className="add-button">+</button></Link>
+                            <div className="addNfilter">
+                                <div className="recur-filter">
+                                    <select value={recurFilter} onChange={(e) => setRecurFilter(e.target.value)}>
+                                        <option value="none">No recur</option>
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="">All</option>
+                                    </select>
+                                </div>
+                                <div className="add">
+                                    <p>Add a new task</p>
+                                    <Link to="/add"><button className="add-button">+</button></Link>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
                         <div className='tasks'>
-                            <Column status="pending" tasks={tasks} deleteFilter={deleteFilter} editFilter={editFilter} setTasks={setTasks} />
-                            <Column status="ongoing" tasks={tasks} deleteFilter={deleteFilter} editFilter={editFilter} setTasks={setTasks} />
-                            <Column status="completed" tasks={tasks} deleteFilter={deleteFilter} editFilter={editFilter} setTasks={setTasks} />
+                            <Column status="pending" tasks={tasks} deleteFilter={deleteFilter} editFilter={editFilter} setTasks={setTasks} recurFilter={recurFilter} />
+                            <Column status="ongoing" tasks={tasks} deleteFilter={deleteFilter} editFilter={editFilter} setTasks={setTasks} recurFilter={recurFilter} />
+                            <Column status="completed" tasks={tasks} deleteFilter={deleteFilter} editFilter={editFilter} setTasks={setTasks} recurFilter={recurFilter} />
                         </div>
                     </DndProvider>
 

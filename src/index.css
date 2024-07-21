@@ -34,10 +34,14 @@ body {
 header {
   margin: 15px 12px;
 }
+header img {
+  width: 40px;
+}
 header .container .row {
   padding: 15px;
   border-radius: 10px;
   background-color: var(--bg-2);
+  align-items: center;
 }
 header a {
   color: var(--color-1) !important;
@@ -46,6 +50,20 @@ header a {
 }
 
 /* home */
+.addNfilter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 30px;
+}
+.recur-filter select {
+  border: 0;
+  background: var(--bg-1);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+}
 .add {
   display: flex;
   justify-content: flex-end;
@@ -156,6 +174,10 @@ header a {
   background: #00000026;
   border-radius: 7px;
   position: relative;
+}
+.column1 .deadline-exceeded,
+.column2 .deadline-exceeded {
+  background: linear-gradient(162deg, #a4111193, #0000000a) !important;
 }
 
 .tasks .column .each-task .buttons {
@@ -297,6 +319,7 @@ header a {
   color: #ffffff;
   padding: 10px;
   border-radius: 5px;
+  width: 100%;
 }
 
 .update .buttons {
@@ -330,14 +353,35 @@ header a {
   gap: 10px;
 }
 .create input,
-.create textarea {
+.create textarea,
+.create select,
+.update select {
   border: 1px solid #646464;
   background: transparent;
   color: #ffffff;
   padding: 10px;
   border-radius: 5px;
+  width: 100%;
 }
-.create button {
+.create .react-datepicker-wrapper {
+  background: transparent;
+  color: #ffffff;
+  padding: 0;
+  border-radius: 5px;
+  width: 100%;
+}
+.create select {
+  /* color: ; */
+  background: var(--bg-1);
+}
+.create .recur,
+.create .date-pick {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 50px;
+}
+.create .add-task-btn {
   border: 0;
   outline: 0;
   width: 100px;
@@ -462,6 +506,9 @@ header a {
   .tasks .column {
     min-width: 100%;
     max-height: 40vh;
+  }
+  .addNfilter {
+    justify-content: space-between;
   }
 }
 @media screen and (max-width: 567px) {

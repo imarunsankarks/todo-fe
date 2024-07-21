@@ -1,5 +1,9 @@
 import { Modal, Button } from 'react-bootstrap';
-const EditModal = ({ show, handleClose, handleEdit, task, title, description, setTitle, setDescription }) => {
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+const EditModal = ({ show, handleClose, handleEdit, task, title, description, setTitle, setDescription, deadline, setDl, recur, setRecur, minDate }) => {
+
     return (
         <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
             <Modal.Body>
@@ -8,7 +12,7 @@ const EditModal = ({ show, handleClose, handleEdit, task, title, description, se
                     className="update"
                     onSubmit={(e) => {
                         e.preventDefault();
-                        handleEdit(task._id, title, description);
+                        handleEdit(task._id, title, description, recur, deadline);
                     }}
                 >
                     <label>Task</label>
@@ -28,6 +32,22 @@ const EditModal = ({ show, handleClose, handleEdit, task, title, description, se
                         value={description}
                         required
                     ></textarea>
+                    {!task.recurrence.includes(' ') && <>
+                        <label>Recurrence </label>
+                        <select value={recur} onChange={(e) => setRecur(e.target.value)}>
+                            <option value="none">None</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                        <label>Deadline </label>
+                        <DatePicker
+                            selected={deadline}
+                            onChange={(date) => setDl(date)}
+                            dateFormat="dd/MM/yyyy"
+                            minDate={minDate}
+                        />
+                    </>}
                     <div className="buttons">
                         <Button variant="secondary" className='close' onClick={() => { handleClose(true) }}>
                             Close

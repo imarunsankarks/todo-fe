@@ -14,7 +14,7 @@ const Navbar = () => {
                 <div className="row justify-content-between">
                     <div className="col-2">
                         <Link to="/">
-                            <span>Todo</span>
+                            <span><img src="/logo.png" alt="" /></span>
                         </Link>
                     </div>
                     <div className="col-4 text-end">
