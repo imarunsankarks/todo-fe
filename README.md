@@ -1,70 +1,66 @@
-# Getting Started with Create React App
+<h1 align="center" id="title">React.js frontend Project for TODO dashboard with task scheduling and drag and drop features</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p id="description"> This React.js frontend project presents a dynamic TODO dashboard with sophisticated task management features. The dashboard displays tasks scheduled on a daily, weekly, or monthly basis, and allows for the addition of tasks without recurrence. The application automatically manages task scheduling based on user-selected recurrence options and provides a filter feature to easily sort and view tasks according to your preferences.
+</p>
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Features](#-features)
+- [Technologies Used](#technologies-used)
+- [Installation Steps](#%EF%B8%8F-installation-steps)
+- [Configuration](#configuration)
+  
+## <h2>🧐 Features</h2>
 
-### `npm start`
+Here are some of the project's best features:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Task Scheduling: Users can efficiently schedule tasks with customizable recurrence options, including daily, weekly, and monthly intervals.
+- Drag and Drop: The intuitive drag-and-drop interface allows users to reorder tasks, enhancing task organization and prioritization easily.
+- Context API: Utilizes React's Context API for user state management.
+- Incorporated search and filter option
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<h2>🛠️ Installation Steps:</h2>
 
-### `npm test`
+<p>1. Clone the repository:</p>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+git clone https://github.com/imarunsankarks/todo-fe.git
+```
 
-### `npm run build`
+<p>2. Navigate to the project directory:</p>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+cd todo-fe
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<p>3. Install the dependencies:</p>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+npm install
+```
 
-### `npm run eject`
+<p>4. Start the project:</p>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Technologies Used
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- React.js: react (^18.3.1), react-dom (^18.3.1)
+- Routing: react-router-dom (^6.25.1)
+- Drag and Drop: react-dnd (^16.0.1), react-dnd-html5-backend (^16.0.1)
+- UI & Styling: bootstrap (^5.3.3), react-bootstrap (^2.10.4), react-datepicker (^7.3.0)
+- Icons: @fortawesome/react-fontawesome (^0.2.2), @fortawesome/free-solid-svg-icons (^6.6.0)
+- HTTP Requests: axios (^1.7.2)
+- Date Handling: date-fns (^3.6.0)
+- Notifications: react-hot-toast (^2.4.1)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Configuration
+This project uses environment variables for configuration. Create a .env file in the root directory and add your configurations:
+```
+REACT_APP_BE_URL=your backend url
+```
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
